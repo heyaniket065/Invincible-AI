@@ -1,0 +1,7 @@
+{
+  "name": "noxz_.editz.7 | Invincible.AI",
+  "description": "A professional AI photo-editor combined with a real-time voice coach for an integrated life-assistant experience. Edit photos with AI, chat with an assistant, and manage your daily routines with a voice coach.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
