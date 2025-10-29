@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { Schedule, Task } from '../types';
+import type { Schedule, Task, VoiceSettings, Screen } from '../types';
 import GlassmorphismCard from '../components/GlassmorphismCard';
 import { generateSpeechFromText } from '../services/geminiService';
 import { playBase64Audio } from '../utils/audioPlayer';
@@ -24,7 +24,18 @@ const mockSchedules: Schedule[] = [
   }
 ];
 
-const CoachScreen: React.FC = () => {
+const coachVoiceSettings: VoiceSettings = {
+  character: 'NoxzAI',
+  tone: 'Supportive',
+  intensity: 1,
+  vocalizations: [],
+};
+
+interface CoachScreenProps {
+  setActiveScreen: (screen: Screen) => void;
+}
+
+const CoachScreen: React.FC<CoachScreenProps> = ({ setActiveScreen }) => {
   const [schedules] = useState<Schedule[]>(mockSchedules);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [timer, setTimer] = useState(0);
@@ -32,7 +43,6 @@ const CoachScreen: React.FC = () => {
   const [xp, setXp] = useState(0);
 
   useEffect(() => {
-    // Fix: Use `ReturnType<typeof setInterval>` for browser compatibility instead of `NodeJS.Timeout`.
     let interval: ReturnType<typeof setInterval> | null = null;
     if (isTimerActive && timer > 0) {
       interval = setInterval(() => {
@@ -43,7 +53,6 @@ const CoachScreen: React.FC = () => {
       if(activeTask) {
         setXp(prevXp => prevXp + activeTask.xp);
         setActiveTask(null);
-        // In a real app, you'd play a sound
         playCompletionSound();
       }
     }
@@ -55,7 +64,7 @@ const CoachScreen: React.FC = () => {
   const playCompletionSound = async () => {
     try {
         const announcement = "Task complete! Well done.";
-        const base64Audio = await generateSpeechFromText(announcement);
+        const base64Audio = await generateSpeechFromText(announcement, coachVoiceSettings);
         await playBase64Audio(base64Audio);
     } catch (e) {
         console.error("Failed to play completion sound:", e);
@@ -69,10 +78,9 @@ const CoachScreen: React.FC = () => {
           setIsTimerActive(true);
       }
       
-      // AI Voice Announcement
       try {
           const announcement = `Your next task is: ${task.name}. ${task.details}. Let's begin.`;
-          const base64Audio = await generateSpeechFromText(announcement);
+          const base64Audio = await generateSpeechFromText(announcement, coachVoiceSettings);
           await playBase64Audio(base64Audio);
       } catch (e) {
           console.error("Failed to generate or play task announcement:", e);
@@ -91,12 +99,20 @@ const CoachScreen: React.FC = () => {
     return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const nextTask = schedules[0].tasks[0]; // Simplified for demo
+  const nextTask = schedules[0].tasks[0];
 
   return (
     <div className="p-4 pt-12 pb-28">
       <h1 className="text-4xl font-bold text-center mb-2">Invincible.AI</h1>
       <p className="text-center text-lg text-gray-300 mb-6">Your Personal Voice Coach</p>
+
+      <GlassmorphismCard className="mb-6 text-center cursor-pointer" onClick={() => setActiveScreen('liveCoach')}>
+        <h2 className="text-2xl font-bold text-[#1E90FF]">Live Voice Coaching</h2>
+        <p className="text-gray-300 mb-4">Start an interactive, real-time session with your AI coach.</p>
+        <button className="bg-[#1E90FF] hover:bg-blue-600 px-8 py-3 rounded-full font-bold text-lg">
+            Start Live Session
+        </button>
+      </GlassmorphismCard>
 
       <div className="mb-6">
         <h2 className="text-xl font-semibold mb-2">XP Progress</h2>

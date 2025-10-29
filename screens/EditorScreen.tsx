@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import type { UploadedImage } from '../types';
+// FIX: Changed import from non-existent type `UploadedImage` to `UploadedMedia` to match the defined types.
+import type { UploadedMedia } from '../types';
 import GlassmorphismCard from '../components/GlassmorphismCard';
 import { generateImageFromPrompt } from '../services/geminiService';
 // FIX: Import CheckIcon from the new Icons.tsx file.
 import { CheckIcon } from '../components/icons/Icons';
 
 interface EditorScreenProps {
-  initialImages: UploadedImage[];
+  initialImages: UploadedMedia[];
 }
 
 const EditorScreen: React.FC<EditorScreenProps> = ({ initialImages }) => {
-  const [images] = useState<UploadedImage[]>(initialImages);
-  const [selectedImages, setSelectedImages] = useState<UploadedImage[]>([]);
+  const [images] = useState<UploadedMedia[]>(initialImages);
+  const [selectedImages, setSelectedImages] = useState<UploadedMedia[]>([]);
   const [editedImageUrls, setEditedImageUrls] = useState<Map<string, string>>(new Map());
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,7 +27,7 @@ const EditorScreen: React.FC<EditorScreenProps> = ({ initialImages }) => {
     }
   }, [initialImages, selectedImages.length]);
 
-  const handleImageSelect = (imageToToggle: UploadedImage) => {
+  const handleImageSelect = (imageToToggle: UploadedMedia) => {
     setSelectedImages(prevSelected => {
       const isAlreadySelected = prevSelected.some(img => img.file.name === imageToToggle.file.name);
 
@@ -44,7 +45,7 @@ const EditorScreen: React.FC<EditorScreenProps> = ({ initialImages }) => {
     });
   };
   
-  const processImages = async (promptGenerator: (image: UploadedImage) => string, filesProvider: (image: UploadedImage) => File[]) => {
+  const processImages = async (promptGenerator: (image: UploadedMedia) => string, filesProvider: (image: UploadedMedia) => File[]) => {
       if (selectedImages.length === 0) return;
       setIsLoading(true);
       setError(null);

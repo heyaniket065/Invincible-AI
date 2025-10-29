@@ -154,7 +154,8 @@ const ProfileScreen: React.FC = () => {
           <h3 className="text-xl font-semibold mb-4">Rep Accuracy (Mock)</h3>
            <ResponsiveContainer width="100%" height="100%">
              <PieChart>
-               <Pie data={repAccuracyData} cx="50%" cy="50%" labelLine={false} outerRadius={80} fill="#8884d8" dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} >
+               {/* Fix: The `percent` property from recharts' Pie component can be undefined. Defaulted to 0 to prevent a TypeError. */}
+               <Pie data={repAccuracyData} cx="50%" cy="50%" labelLine={false} outerRadius={80} fill="#8884d8" dataKey="value" label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}>
                  {repAccuracyData.map((entry, index) => (
                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                  ))}

@@ -1,0 +1,458 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap');
+
+:root {
+  --skin-tone: #ffeadb;
+  --hair-color: #3a2a3a;
+  --shirt-color: #f0f0f0;
+  --strap-color: #555;
+  --eye-color: #7b5d6f;
+  --mouth-color: #c77b8d;
+  --bg-dark: #2c2a4a;
+  --bg-light: #4f4a7c;
+  --primary: #ff85a2;
+  --secondary: #a6c1ff;
+  --accent: #82eefd;
+}
+
+.listening-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--bg-dark), var(--bg-light));
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+}
+
+.sunbeam {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 75% 25%, rgba(255, 220, 150, 0.2), transparent 40%);
+    animation: spin 60s linear infinite, parallax-shift 25s ease-in-out infinite alternate;
+    z-index: 0;
+}
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+@keyframes parallax-shift {
+    from { transform: translate(-2%, -2%) rotate(0deg); }
+    to { transform: translate(2%, 2%) rotate(10deg); }
+}
+
+/* --- Particles --- */
+.particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 1;
+}
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background-color: var(--accent);
+  border-radius: 50%;
+  opacity: 0;
+  animation: float 20s infinite ease-in-out;
+  transition: animation-duration 0.5s ease;
+}
+
+.particles.speaking .particle {
+    animation-duration: 5s; /* Speed up particles when speaking */
+    background-color: var(--primary);
+}
+
+.particle:nth-child(2) { animation-delay: 3s; width: 2px; height: 2px; }
+.particle:nth-child(3) { animation-delay: -2s; animation-duration: 15s; }
+.particle:nth-child(4) { animation-delay: 5s; }
+.particle:nth-child(5) { animation-delay: -5s; animation-duration: 25s; }
+.particle:nth-child(6) { animation-delay: 8s; width: 3px; height: 3px; }
+.particle:nth-child(7) { animation-delay: -8s; }
+.particle:nth-child(8) { animation-delay: 11s; animation-duration: 18s; }
+.particle:nth-child(9) { animation-delay: -13s; }
+.particle:nth-child(10) { animation-delay: 15s; }
+
+
+@keyframes float {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  50% { opacity: 0.7; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+.chat-history-container {
+  position: absolute;
+  top: 5%;
+  bottom: 40%;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 5;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.chat-history-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- Character --- */
+.character-container {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 400px;
+  z-index: 10;
+  perspective: 1000px;
+}
+
+.character {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: transform 0.5s ease;
+}
+.character.breathing .character-body {
+  animation: breathe 4s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%, 100% { transform: translateY(0) rotateX(0deg) scale(1); }
+  50% { transform: translateY(-8px) rotateX(-1.5deg) scale(1.01); }
+}
+
+.character-shadow {
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  width: 180px;
+  height: 25px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  filter: blur(8px);
+  transition: transform 0.5s ease;
+  animation: shadow-breathe 4s ease-in-out infinite;
+}
+@keyframes shadow-breathe {
+    0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
+    50% { transform: translateX(-50%) scale(0.95); opacity: 0.9; }
+}
+
+.character-body {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.head {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 130px;
+    z-index: 10;
+}
+.face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--skin-tone);
+  border-radius: 50% 50% 45% 45%;
+  z-index: 2;
+}
+.eye {
+  position: absolute;
+  top: 50px;
+  width: 30px;
+  height: 40px;
+  background: white;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #555;
+}
+.eye.left { left: 15px; }
+.eye.right { right: 15px; }
+
+.pupil {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 25px;
+    background: radial-gradient(circle at 50% 40%, var(--eye-color) 40%, #2f1d2e 100%);
+    border-radius: 50%;
+}
+.pupil::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 3px white;
+}
+
+.eyelid {
+    position: absolute;
+    top: -10px; /* Start slightly above the eye */
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background: var(--skin-tone);
+    transform: translateY(0);
+    animation: blink-eyelid 8s infinite ease-in-out;
+}
+
+.eye.right .eyelid {
+    animation-delay: 0.3s;
+}
+
+@keyframes blink-eyelid {
+    0%, 95%, 100% { 
+        transform: translateY(0); /* Eyelid is up (eye is open) */
+    }
+    97% { 
+        transform: translateY(25px); /* Eyelid is down (eye is closed) */
+    }
+    99% {
+        transform: translateY(0); /* Eyelid is up again */
+    }
+}
+
+
+.mouth {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 10px;
+  background: var(--mouth-color);
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  transition: all 0.2s ease;
+}
+.character.speaking .mouth {
+    animation: talk 0.3s infinite ease-in-out;
+}
+@keyframes talk {
+    0% { height: 5px; width: 15px; border-radius: 50%; }
+    25% { height: 15px; width: 22px; border-radius: 40% 40% 50% 50%; }
+    50% { height: 10px; width: 20px; border-radius: 50%; }
+    75% { height: 16px; width: 18px; border-radius: 50% 50% 40% 40%; }
+    100% { height: 5px; width: 15px; border-radius: 50%; }
+}
+
+.hair-main {
+  position: absolute;
+  width: 150px;
+  height: 160px;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  animation: hair-flow-main 6s ease-in-out infinite alternate;
+}
+@keyframes hair-flow-main {
+    from { transform: translateX(-50%) rotate(-1deg); }
+    to { transform: translateX(-50%) rotate(1deg); }
+}
+
+.bangs {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 80px;
+  background: var(--hair-color);
+  border-radius: 50% 50% 20% 20%;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 80% 90%, 50% 100%, 20% 90%, 0 100%);
+}
+
+.hair-back {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 160px;
+  height: 200px;
+  background: var(--hair-color);
+  border-radius: 50% 50% 30% 30%;
+  z-index: 0;
+  animation: hair-flow-back 8s ease-in-out infinite alternate;
+}
+@keyframes hair-flow-back {
+    from { transform: translateX(-50%) rotate(2deg); }
+    to { transform: translateX(-50%) rotate(-2deg); }
+}
+
+.hair-back::before, .hair-back::after {
+    content: '';
+    position: absolute;
+    background: var(--hair-color);
+    width: 60px;
+    height: 120px;
+    bottom: -20px;
+    border-radius: 30% 70% 30% 70%;
+}
+.hair-back::before {
+    left: 0;
+    transform: rotate(-15deg);
+}
+.hair-back::after {
+    right: 0;
+    transform: rotate(15deg);
+}
+
+.torso {
+    position: absolute;
+    top: 170px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 150px;
+    z-index: 1;
+}
+.neck {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 30px;
+    background: var(--skin-tone);
+    z-index: 0;
+}
+.shirt {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 120px;
+    background: var(--shirt-color);
+    border-radius: 20px 20px 0 0;
+    clip-path: polygon(15% 0, 85% 0, 100% 100%, 0% 100%);
+}
+.shirt-strap-left, .shirt-strap-right {
+    position: absolute;
+    top: 0;
+    width: 10px;
+    height: 25px;
+    background: var(--strap-color);
+}
+.shirt-strap-left {
+    left: 10px;
+    transform: rotate(-15deg);
+}
+.shirt-strap-right {
+    right: 10px;
+    transform: rotate(15deg);
+}
+
+
+/* --- Transcription UI (Static) --- */
+.transcription-ui {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 25%;
+  pointer-events: none;
+  z-index: 15;
+}
+.speech-bubble {
+  padding: 0.75rem 1.25rem;
+  border-radius: 20px;
+  margin: 0.5rem;
+  max-width: 80%;
+  pointer-events: all;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.transcription-ui .speech-bubble {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.transcription-ui .speech-bubble.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.model-speech {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--bg-dark);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+.user-speech {
+  background: var(--secondary);
+  color: var(--bg-dark);
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+/* --- Error Overlay --- */
+.error-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+.error-card {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    max-width: 90%;
+    width: 350px;
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
+}
+.error-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ff85a2;
+    margin-bottom: 0.5rem;
+}
+.error-message {
+    color: #f0f0f0;
+    margin-bottom: 1.5rem;
+}
+.retry-button {
+    background-color: var(--primary);
+    color: var(--bg-dark);
+    font-weight: bold;
+    padding: 0.75rem 2rem;
+    border-radius: 9999px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+.retry-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px var(--primary);
+}

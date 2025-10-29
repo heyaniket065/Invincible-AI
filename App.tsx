@@ -1,36 +1,67 @@
 
-import React, { useState } from 'react';
-import type { Screen, UploadedImage } from './types';
+import React, { useState, useRef, useEffect } from 'react';
+import type { Screen } from './types';
 import BottomNav from './components/BottomNav';
 import HomeScreen from './screens/HomeScreen';
-import EditorScreen from './screens/EditorScreen';
 import ChatScreen from './screens/ChatScreen';
 import CoachScreen from './screens/CoachScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import LiveCoachScreen from './screens/LiveCoachScreen';
+
+const EDITED_IMAGES_KEY = 'noxz_edited_images';
 
 const App: React.FC = () => {
-  const [activeScreen, setActiveScreen] = useState<Screen>('home');
-  const [imagesToEdit, setImagesToEdit] = useState<UploadedImage[]>([]);
+  const [activeScreen, _setActiveScreen] = useState<Screen>('home');
+  const [editedImages, setEditedImages] = useState<string[]>([]);
+  const previousScreenRef = useRef<Screen>('home');
 
-  const handleNavigateToEditor = (images: UploadedImage[]) => {
-    setImagesToEdit(images);
-    setActiveScreen('editor');
+  useEffect(() => {
+    const savedImages = localStorage.getItem(EDITED_IMAGES_KEY);
+    if (savedImages) {
+      try {
+        setEditedImages(JSON.parse(savedImages));
+      } catch (e) {
+        console.error("Failed to parse edited images from localStorage", e);
+        localStorage.removeItem(EDITED_IMAGES_KEY);
+      }
+    }
+  }, []);
+
+  const addEditedImage = (imageUrl: string) => {
+    setEditedImages(prevImages => {
+      const newImages = [imageUrl, ...prevImages];
+      try {
+        localStorage.setItem(EDITED_IMAGES_KEY, JSON.stringify(newImages));
+      } catch (e) {
+        console.error("Failed to save edited images to localStorage", e);
+        // Optionally, inform the user that storage is full
+      }
+      return newImages;
+    });
+  };
+
+  const setActiveScreen = (screen: Screen) => {
+    if (screen !== activeScreen) {
+        previousScreenRef.current = activeScreen;
+    }
+    _setActiveScreen(screen);
   };
   
   const renderScreen = () => {
     switch (activeScreen) {
       case 'home':
-        return <HomeScreen onUpload={handleNavigateToEditor} />;
-      case 'editor':
-        return <EditorScreen initialImages={imagesToEdit} />;
+        return <HomeScreen editedImages={editedImages} setActiveScreen={setActiveScreen} />;
       case 'chat':
-        return <ChatScreen />;
+        return <ChatScreen setActiveScreen={setActiveScreen} addEditedImage={addEditedImage} />;
       case 'coach':
-        return <CoachScreen />;
+        return <CoachScreen setActiveScreen={setActiveScreen} />;
       case 'profile':
         return <ProfileScreen />;
+      case 'liveCoach':
+        const fromScreen = previousScreenRef.current === 'liveCoach' ? 'coach' : previousScreenRef.current;
+        return <LiveCoachScreen setActiveScreen={setActiveScreen} fromScreen={fromScreen} />;
       default:
-        return <HomeScreen onUpload={handleNavigateToEditor} />;
+        return <HomeScreen editedImages={editedImages} setActiveScreen={setActiveScreen} />;
     }
   };
 
@@ -39,7 +70,7 @@ const App: React.FC = () => {
       <main className="flex-grow pb-24">
         {renderScreen()}
       </main>
-      <BottomNav activeScreen={activeScreen} setActiveScreen={setActiveScreen} />
+      {activeScreen !== 'liveCoach' && <BottomNav activeScreen={activeScreen} setActiveScreen={setActiveScreen} />}
     </div>
   );
 };
