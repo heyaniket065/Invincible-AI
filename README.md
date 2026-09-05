@@ -1,20 +1,23 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Invincible AI
 
-# Run and deploy your AI Studio app
+AI-powered project repository by Aniket Bhalerao.
 
-This contains everything you need to run your app locally.
+## About
+Invincible AI is a learning and development repository focused on artificial intelligence, web development, automation and open-source projects.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1e1lE0VqlvPmWUxJbwwMulT_LvEnYaOgI
+## Skills
+- HTML
+- CSS
+- JavaScript
+- Python
+- AI Tools
+- Git & GitHub
 
-## Run Locally
+## Roadmap
+- Build AI applications
+- Create web projects
+- Improve open-source contributions
+- Maintain professional portfolio
 
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Connect
+GitHub: https://github.com/heyaniket065
