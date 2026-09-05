@@ -1,6 +1,6 @@
 {
-  "name": "Universal noxz_.editz.7 | Invincible.AI",
-  "description": "A professional AI photo-editor combined with a real-time voice coach for an integrated life-assistant experience. Edit photos with AI, chat with an assistant, and manage your daily routines with a voice coach.",
+  "name": "Invincible AI by Aniket Bhalerao",
+  "description": "Modern AI assistant, smart photo editing, voice interaction and productivity tools built as a professional portfolio project.",
   "requestFramePermissions": [
     "microphone",
     "camera"
